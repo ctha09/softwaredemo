@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f1014" />
+  <meta name="description" content="GestOK desarrolla soluciones modernas para ventas, tiendas online y control comercial." />
+  <title>GestOK | Soluciones para tu negocio</title>
+  <style>
+    :root{
+      --bg:#0c0d12;
+      --bg-2:#13161d;
+      --panel:rgba(22,25,33,.82);
+      --panel-2:rgba(18,21,28,.94);
+      --text:#f6f7fb;
+      --muted:#aeb3bf;
+      --line:rgba(255,255,255,.09);
+      --orange:#ff7a1a;
+      --orange-2:#ffad63;
+      --orange-soft:rgba(255,122,26,.12);
+      --shadow:0 22px 70px rgba(0,0,0,.35);
+      --radius:26px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(255,122,26,.11), transparent 26%),
+        radial-gradient(circle at 88% 18%, rgba(255,122,26,.06), transparent 18%),
+        linear-gradient(180deg, #090a0e 0%, #10131a 58%, #0a0b10 100%);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    img{max-width:100%;height:auto}
+    ::selection{background:var(--orange);color:#fff}
+
+    .container{width:min(calc(100% - 28px), var(--max));margin-inline:auto}
+    .glass{
+      background:linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:16px;
+      color:var(--orange-2);
+      font-weight:900;
+      font-size:.78rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .eyebrow::before{
+      content:"";
+      width:24px;height:2px;border-radius:999px;
+      background:var(--orange);
+    }
+    .section-title{
+      margin:0;
+      font-size:clamp(2.25rem, 5vw, 4.8rem);
+      line-height:.95;
+      letter-spacing:-.06em;
+    }
+    .section-title span{color:var(--orange)}
+    .lead{
+      max-width:760px;
+      margin:20px 0 0;
+      color:var(--muted);
+      font-size:clamp(1rem,1.7vw,1.12rem);
+      line-height:1.75;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(26px);
+      filter:blur(4px);
+      transition:opacity .75s ease, transform .75s cubic-bezier(.2,.8,.2,1), filter .75s ease;
+    }
+    .reveal.visible{
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+
+    .scroll-indicator{
+      position:fixed;
+      left:0;top:0;
+      width:0;height:3px;
+      z-index:5000;
+      background:linear-gradient(90deg, var(--orange), var(--orange-2));
+      box-shadow:0 0 16px rgba(255,122,26,.45);
+    }
+
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:9000;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(circle at center, rgba(255,122,26,.18), transparent 32%),
+        linear-gradient(145deg, #090a0e, #141821);
+      transition:opacity .65s ease, visibility .65s ease;
+      overflow:hidden;
+    }
+    .intro.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .intro::before,
+    .intro::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      border:1px solid rgba(255,173,99,.18);
+      animation:spin 16s linear infinite;
+    }
+    .intro::before{width:min(56vw,620px);height:min(56vw,620px)}
+    .intro::after{width:min(78vw,820px);height:min(78vw,820px);animation-duration:22s;animation-direction:reverse}
+    .intro-inner{
+      position:relative;
+      z-index:2;
+      width:min(860px,90vw);
+      text-align:center;
+    }
+    .intro-brand{
+      margin:0;
+      font-size:clamp(3.8rem,11vw,8rem);
+      line-height:.88;
+      letter-spacing:-.08em;
+      font-weight:950;
+      animation:introScale .85s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .intro-brand span{color:var(--orange)}
+    .intro-text{
+      margin:14px 0 0;
+      font-size:clamp(1.2rem,3vw,2rem);
+      color:#dfe2ea;
+      opacity:0;
+      transform:translateY(12px);
+      animation:fadeUp .7s .45s ease forwards;
+    }
+    .intro-bar{
+      width:min(320px,68vw);
+      height:4px;
+      margin:28px auto 0;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.08);
+      opacity:0;
+      animation:fadeUp .45s .8s ease forwards;
+    }
+    .intro-bar i{
+      display:block;width:100%;height:100%;
+      background:linear-gradient(90deg, var(--orange), var(--orange-2));
+      transform-origin:left;
+      animation:loadBar 2.35s .12s cubic-bezier(.4,0,.2,1) both;
+    }
+    .skip-intro{
+      position:absolute;
+      right:18px;bottom:18px;
+      min-height:46px;
+      padding:0 14px;
+      border-radius:13px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      z-index:4;
+    }
+
+    .nav{
+      position:fixed;
+      top:14px;left:50%;
+      transform:translateX(-50%);
+      z-index:1000;
+      width:min(calc(100% - 20px), var(--max));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:11px 12px 11px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(10,11,15,.78);
+      backdrop-filter:blur(16px);
+      box-shadow:0 12px 36px rgba(0,0,0,.22);
+    }
+    .brand{
+      font-size:1.34rem;
+      font-weight:950;
+      letter-spacing:-.06em;
+      white-space:nowrap;
+    }
+    .brand span{color:var(--orange)}
+    .nav-links{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    .nav-links a{
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:.92rem;
+      color:#c8ccd5;
+      transition:.22s;
+    }
+    .nav-links a:hover{
+      color:#fff;
+      background:rgba(255,255,255,.05);
+    }
+    .nav-cta,.btn-primary,.btn-secondary,.btn-back,.btn-demo{
+      min-height:48px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:0 18px;
+      border-radius:14px;
+      font-weight:850;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .nav-cta,.btn-primary,.btn-demo{
+      border:0;
+      color:#fff;
+      background:linear-gradient(135deg, var(--orange), #ff9650);
+      box-shadow:0 14px 30px rgba(255,122,26,.22);
+    }
+    .btn-secondary,.btn-back{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+    }
+    .nav-cta:hover,.btn-primary:hover,.btn-secondary:hover,.btn-back:hover,.btn-demo:hover{transform:translateY(-2px)}
+    .menu-btn{
+      display:none;
+      width:42px;height:42px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      font-size:1.15rem;
+    }
+
+    .hero{
+      min-height:100svh;
+      display:grid;
+      align-items:center;
+      padding:140px 0 90px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 72% 32%, rgba(255,122,26,.14), transparent 18%),
+        radial-gradient(circle at 84% 20%, rgba(255,122,26,.10), transparent 28%);
+      pointer-events:none;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.02fr) minmax(300px,.98fr);
+      gap:38px;
+      align-items:center;
+      position:relative;
+      z-index:2;
+    }
+    .hero-copy h1{
+      margin:0;
+      font-size:clamp(3rem,7.8vw,7rem);
+      line-height:.88;
+      letter-spacing:-.08em;
+      font-weight:950;
+    }
+    .hero-copy h1 span{display:block;color:var(--orange)}
+    .hero-copy p{
+      max-width:760px;
+      margin:24px 0 0;
+      color:#c3c7cf;
+      line-height:1.75;
+      font-size:clamp(1rem,1.8vw,1.15rem);
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:30px;
+    }
+    .hero-card{
+      border-radius:30px;
+      padding:26px;
+      position:relative;
+      overflow:hidden;
+      min-height:420px;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,122,26,.14), transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(135deg, rgba(255,122,26,.05), transparent 48%),
+        linear-gradient(180deg, transparent, rgba(0,0,0,.18));
+      pointer-events:none;
+    }
+    .hero-stack{
+      position:relative;
+      height:100%;
+      min-height:360px;
+    }
+    .floating-panel{
+      position:absolute;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(11,13,18,.84);
+      box-shadow:0 16px 34px rgba(0,0,0,.28);
+      backdrop-filter:blur(14px);
+      animation:float 4.2s ease-in-out infinite;
+    }
+    .floating-panel.panel-main{
+      inset:40px 14px 48px 14px;
+      padding:18px;
+      animation-duration:4.8s;
+    }
+    .floating-panel.panel-small{
+      width:170px;
+      padding:14px;
+      top:6px;right:6px;
+    }
+    .floating-panel.panel-bottom{
+      width:190px;
+      padding:14px;
+      bottom:8px;left:0;
+      animation-delay:-1.6s;
+    }
+    .window-head{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:14px;
+    }
+    .window-head i{
+      width:9px;height:9px;border-radius:50%;
+      display:block;
+      background:#4f5561;
+    }
+    .window-head i:nth-child(1){background:#ff6c57}
+    .window-head i:nth-child(2){background:#ffbd2f}
+    .window-head i:nth-child(3){background:#28c840}
+    .dash-title{
+      font-size:1.15rem;
+      font-weight:900;
+      letter-spacing:-.03em;
+      margin:0 0 14px;
+    }
+    .dash-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .dash-box{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:18px;
+      padding:14px;
+      min-height:92px;
+    }
+    .dash-box strong{
+      display:block;
+      font-size:1.12rem;
+      margin-bottom:5px;
+    }
+    .dash-box span{
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.4;
+    }
+
+    .section{padding:96px 0}
+    .about-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:44px;
+    }
+    .about-card{
+      padding:28px;
+      border-radius:28px;
+    }
+    .about-card h3{
+      margin:0 0 12px;
+      font-size:1.55rem;
+      letter-spacing:-.03em;
+    }
+    .about-card p{
+      margin:0;
+      color:#b3b7c1;
+      line-height:1.76;
+    }
+    .about-points{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+    }
+    .about-points div{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:#d7dae1;
+      font-size:.94rem;
+    }
+    .about-points i{
+      width:20px;height:20px;border-radius:50%;
+      flex:0 0 20px;
+      display:grid;place-items:center;
+      background:rgba(255,122,26,.13);
+      color:var(--orange-2);
+      font-style:normal;
+      font-size:.72rem;
+      font-weight:900;
+      margin-top:2px;
+    }
+
+    .choices{padding-bottom:110px}
+    .card-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:44px;
+    }
+    .choice-card{
+      position:relative;
+      overflow:hidden;
+      min-height:350px;
+      padding:28px 26px;
+      border-radius:30px;
+      cursor:pointer;
+      transition:transform .28s cubic-bezier(.2,.8,.2,1), border-color .28s ease, box-shadow .28s ease;
+    }
+    .choice-card:hover{
+      transform:translateY(-8px);
+      border-color:rgba(255,173,99,.22);
+      box-shadow:0 30px 80px rgba(0,0,0,.42);
+    }
+    .choice-card::before{
+      content:"";
+      position:absolute;
+      width:220px;height:220px;
+      right:-80px;top:-80px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,122,26,.14), transparent 70%);
+      pointer-events:none;
+    }
+    .choice-icon{
+      width:58px;height:58px;
+      display:grid;place-items:center;
+      border-radius:18px;
+      background:var(--orange-soft);
+      border:1px solid rgba(255,173,99,.2);
+      color:#ffd2ab;
+      margin-bottom:22px;
+    }
+    .choice-icon svg{width:28px;height:28px;display:block}
+    .choice-card h3{
+      margin:0 0 10px;
+      font-size:1.65rem;
+      line-height:1.06;
+      letter-spacing:-.04em;
+      max-width:290px;
+    }
+    .choice-card p{
+      margin:0;
+      color:#afb3bc;
+      line-height:1.74;
+    }
+    .choice-meta{
+      margin-top:22px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .choice-meta span{
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:.75rem;
+      color:#d8dce3;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .choice-footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:24px;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.08);
+      font-weight:900;
+    }
+    .choice-footer b{color:var(--orange-2)}
+    .choice-badge{
+      position:absolute;
+      top:18px;right:18px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:.72rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+      color:#fff;
+    }
+
+    .detail-layer{
+      position:fixed;
+      inset:0;
+      z-index:3000;
+      display:none;
+      background:rgba(6,7,10,.9);
+      backdrop-filter:blur(18px);
+    }
+    .detail-layer.show{display:block}
+    .cinematic{
+      position:absolute;
+      inset:0;
+      display:none;
+      place-items:center;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at center, rgba(255,122,26,.14), transparent 28%),
+        linear-gradient(180deg, rgba(10,11,16,.98), rgba(10,12,18,.98));
+    }
+    .cinematic.show{display:grid}
+    .cine-wrap{
+      position:relative;
+      width:min(680px, 92vw);
+      height:min(680px, 92vw);
+      display:grid;
+      place-items:center;
+    }
+    .orbit{
+      position:absolute;
+      inset:0;
+      animation:spin 8s linear infinite;
+    }
+    .orbit.slow{animation-duration:12s}
+    .orbit-ring{
+      position:absolute;
+      left:50%;top:50%;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      border:1px solid rgba(255,173,99,.16);
+    }
+    .orbit-ring.r1{width:280px;height:280px}
+    .orbit-ring.r2{width:410px;height:410px}
+    .orbit-item{
+      position:absolute;
+      width:86px;height:86px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      border-radius:22px;
+      padding:8px;
+      background:linear-gradient(145deg, rgba(10,13,22,.97), rgba(7,10,18,.96));
+      border:1px solid rgba(86,126,255,.18);
+      box-shadow:0 14px 30px rgba(0,0,0,.3);
+      animation:counterSpin 8s linear infinite;
+    }
+    .orbit.slow .orbit-item{animation-duration:12s}
+    .orbit-item i{
+      display:grid;place-items:center;
+      width:30px;height:30px;
+      border-radius:10px;
+      background:rgba(255,122,26,.16);
+      color:#ffd4af;
+      font-style:normal;
+      font-size:.94rem;
+      margin:auto;
+    }
+    .orbit-item small{
+      display:block;
+      margin-top:5px;
+      color:#eef1f6;
+      font-size:.67rem;
+      line-height:1.1;
+      font-weight:850;
+    }
+    .orbit.a .i1{left:50%;top:16px;transform:translateX(-50%)}
+    .orbit.a .i2{right:18px;top:50%;transform:translateY(-50%)}
+    .orbit.a .i3{left:50%;bottom:16px;transform:translateX(-50%)}
+    .orbit.a .i4{left:18px;top:50%;transform:translateY(-50%)}
+    .orbit.b .i1{left:84px;top:92px}
+    .orbit.b .i2{right:84px;bottom:92px}
+    .cine-core{
+      position:absolute;
+      left:50%;top:50%;
+      transform:translate(-50%,-50%);
+      width:220px;height:220px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:24px;
+      z-index:2;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,122,26,.18), transparent 38%),
+        linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border:1px solid rgba(255,173,99,.18);
+      box-shadow:0 30px 90px rgba(0,0,0,.42);
+    }
+    .cine-core strong{
+      display:block;
+      font-size:1.6rem;
+      letter-spacing:-.05em;
+      margin-bottom:7px;
+    }
+    .cine-core span{
+      display:block;
+      color:#c1c6d0;
+      font-size:.92rem;
+      line-height:1.45;
+    }
+    .cine-skip{
+      position:absolute;
+      right:18px;bottom:18px;
+      min-height:46px;
+      padding:0 14px;
+      border-radius:13px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+    }
+
+    .detail-view{
+      position:absolute;
+      inset:0;
+      display:none;
+      overflow-y:auto;
+      padding:90px 0 44px;
+      background:
+        radial-gradient(circle at 16% 6%, rgba(255,122,26,.1), transparent 20%),
+        linear-gradient(180deg, #0b0d12, #10141c 46%, #0b0d12 100%);
+    }
+    .detail-view.active{display:block}
+    .detail-head{
+      position:sticky;
+      top:10px;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:20px;
+      padding:10px 0;
+    }
+    .detail-pill{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,173,99,.18);
+      background:rgba(255,122,26,.08);
+      color:#ffd6b1;
+      font-size:.76rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:900;
+    }
+    .detail-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);
+      gap:20px;
+      align-items:start;
+    }
+    .detail-card{
+      border-radius:30px;
+      padding:30px;
+    }
+    .detail-card h2{
+      margin:0;
+      font-size:clamp(2.3rem,4.5vw,4.5rem);
+      line-height:.94;
+      letter-spacing:-.06em;
+    }
+    .detail-card h2 span{color:var(--orange)}
+    .detail-card p{
+      margin:18px 0 0;
+      color:#b5bac4;
+      line-height:1.75;
+    }
+    .detail-tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .detail-tags span{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      font-size:.78rem;
+      color:#dce0e6;
+    }
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:22px;
+    }
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:22px;
+    }
+    .feature-card{
+      min-height:150px;
+      padding:18px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .feature-card .num{
+      width:36px;height:36px;
+      display:grid;place-items:center;
+      border-radius:12px;
+      margin-bottom:12px;
+      background:rgba(255,122,26,.14);
+      color:#ffd0a6;
+      font-size:.82rem;
+      font-weight:900;
+    }
+    .feature-card h4{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .feature-card p{
+      margin:0;
+      color:#afb4bf;
+      font-size:.9rem;
+      line-height:1.6;
+    }
+    .preview-card{
+      border-radius:30px;
+      padding:26px;
+      position:relative;
+      overflow:hidden;
+      min-height:420px;
+    }
+    .preview-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255,122,26,.12), transparent 22%),
+        linear-gradient(180deg, transparent, rgba(0,0,0,.08));
+      pointer-events:none;
+    }
+    .preview-card h3{
+      margin:0;
+      font-size:1.45rem;
+      letter-spacing:-.04em;
+    }
+    .preview-card p{
+      margin:12px 0 0;
+      color:#b5bac4;
+      line-height:1.7;
+    }
+    .mini-mock{
+      margin-top:18px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:rgba(255,255,255,.03);
+    }
+    .mini-mock .top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      color:#dfe3ea;
+      font-size:.9rem;
+      font-weight:700;
+    }
+    .mini-mock .body{
+      padding:16px;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+    .mini-mock .box{
+      min-height:84px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.03);
+    }
+    .mini-mock .box strong{
+      display:block;
+      font-size:.95rem;
+      margin-bottom:6px;
+    }
+    .mini-mock .box span{
+      color:#adb2bc;
+      font-size:.83rem;
+      line-height:1.4;
+    }
+
+    .footer{
+      padding:0 0 56px;
+    }
+    .footer-box{
+      border-radius:24px;
+      padding:22px;
+      text-align:center;
+      color:#aeb3bd;
+      font-size:.92rem;
+    }
+    .footer-box b{color:#fff}
+
+    @media (max-width: 1024px){
+      .hero-grid,.about-grid,.detail-grid{grid-template-columns:1fr}
+      .card-grid{grid-template-columns:repeat(2,1fr)}
+      .card-grid .choice-card:last-child{grid-column:1/-1}
+      .feature-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 767px){
+      body{font-size:15px}
+      .container{width:calc(100% - 18px)}
+      .nav{
+        top:8px;
+        width:calc(100% - 14px);
+        padding:8px 8px 8px 14px;
+        border-radius:16px;
+      }
+      .menu-btn{
+        display:block;
+        min-width:44px;min-height:44px;
+      }
+      .nav-cta{display:none}
+      .nav-links{
+        position:absolute;
+        left:0;right:0;top:58px;
+        display:none;
+        flex-direction:column;
+        align-items:stretch;
+        padding:8px;
+        border-radius:16px;
+        border:1px solid var(--line);
+        background:rgba(11,12,16,.96);
+      }
+      .nav.open .nav-links{display:flex}
+      .nav-links a{min-height:46px;display:flex;align-items:center}
+      .hero{
+        min-height:auto;
+        padding:112px 0 70px;
+      }
+      .hero-copy h1{font-size:clamp(3.2rem,16vw,5.2rem)}
+      .hero-actions{flex-direction:column}
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary{width:100%}
+      .hero-card{
+        min-height:auto;
+        padding:18px;
+        border-radius:24px;
+      }
+      .hero-stack{min-height:320px}
+      .floating-panel.panel-main{inset:34px 8px 34px 8px}
+      .floating-panel.panel-small{width:150px}
+      .floating-panel.panel-bottom{width:160px}
+      .section{padding:78px 0}
+      .about-card,.choice-card,.detail-card,.preview-card{padding:22px;border-radius:24px}
+      .card-grid{grid-template-columns:1fr}
+      .card-grid .choice-card:last-child{grid-column:auto}
+      .choice-card{min-height:auto}
+      .detail-view{padding-top:72px}
+      .detail-head{position:static}
+      .cta-row{flex-direction:column}
+      .cta-row .btn-primary,
+      .cta-row .btn-secondary,
+      .cta-row .btn-demo,
+      .cta-row .btn-back{width:100%}
+      .feature-grid{grid-template-columns:1fr}
+      .mini-mock .body{grid-template-columns:1fr}
+      .cine-wrap{width:min(92vw,520px);height:min(92vw,520px)}
+      .orbit-ring.r1{width:220px;height:220px}
+      .orbit-ring.r2{width:320px;height:320px}
+      .orbit-item{width:72px;height:72px;border-radius:18px}
+      .orbit-item small{font-size:.58rem}
+      .cine-core{width:168px;height:168px;padding:16px}
+      .cine-core strong{font-size:1.18rem}
+      .cine-core span{font-size:.78rem}
+      .skip-intro,.cine-skip{min-height:42px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+        scroll-behavior:auto !important;
+      }
+    }
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes counterSpin{to{transform:rotate(-360deg)}}
+    @keyframes introScale{
+      from{opacity:0;transform:scale(.86);filter:blur(10px)}
+      to{opacity:1;transform:scale(1);filter:blur(0)}
+    }
+    @keyframes fadeUp{to{opacity:1;transform:none}}
+    @keyframes loadBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes float{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-9px)}
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-indicator" id="scrollIndicator"></div>
+
+  <section class="intro" id="intro">
+    <div class="intro-inner">
+      <h1 class="intro-brand">Gest<span>OK</span></h1>
+      <p class="intro-text">Bienvenidos a GestOK</p>
+      <div class="intro-bar"><i></i></div>
+    </div>
+    <button class="skip-intro" id="skipIntro" type="button">Entrar</button>
+  </section>
+
+  <header class="nav" id="nav">
+    <a class="brand" href="#inicio">Gest<span>OK</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#gestok">Qué es GestOK</a>
+      <a href="#buscas">Qué buscás</a>
+    </nav>
+    <a class="nav-cta" href="#buscas">Ver opciones</a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú">☰</button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Soluciones modernas para negocios</div>
+          <h1>Gestioná.<br>Vendé.<br><span>Crecé.</span></h1>
+          <p>
+            GestOK es una marca dedicada al desarrollo de herramientas para mejorar la operación de los negocios.
+            Creamos software para ventas, soluciones para tiendas online y propuestas enfocadas en el control comercial,
+            con una estética moderna, clara y profesional.
+          </p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#buscas">¿Qué es lo que buscás?</a>
+            <a class="btn-secondary" href="#gestok">Conocer GestOK</a>
+          </div>
+        </div>
+
+        <div class="hero-card glass reveal">
+          <div class="hero-stack">
+            <div class="floating-panel panel-main">
+              <div class="window-head"><i></i><i></i><i></i></div>
+              <h3 class="dash-title">Vista general GestOK</h3>
+              <div class="dash-grid">
+                <div class="dash-box">
+                  <strong>Ventas</strong>
+                  <span>Control del negocio y operación diaria.</span>
+                </div>
+                <div class="dash-box">
+                  <strong>Tiendas</strong>
+                  <span>Presencia online personalizada.</span>
+                </div>
+                <div class="dash-box">
+                  <strong>Estadísticas</strong>
+                  <span>Lectura simple de tu actividad.</span>
+                </div>
+                <div class="dash-box">
+                  <strong>Gestión</strong>
+                  <span>Herramientas para trabajar mejor.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="floating-panel panel-small">
+              <div class="window-head"><i></i><i></i><i></i></div>
+              <strong style="display:block;font-size:.92rem;margin-bottom:6px;">Enfoque</strong>
+              <span style="color:#aeb3bf;font-size:.82rem;line-height:1.45;">Simple, moderno y profesional.</span>
+            </div>
+
+            <div class="floating-panel panel-bottom">
+              <div class="window-head"><i></i><i></i><i></i></div>
+              <strong style="display:block;font-size:.92rem;margin-bottom:6px;">Experiencia</strong>
+              <span style="color:#aeb3bf;font-size:.82rem;line-height:1.45;">Optimizada para celular, tablet y PC.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gestok">
+      <div class="container">
+        <div class="reveal">
+          <div class="eyebrow">Qué es GestOK</div>
+          <h2 class="section-title">Una marca que desarrolla <span>soluciones para vender y gestionar.</span></h2>
+          <p class="lead">
+            La idea de GestOK es ofrecer herramientas concretas para acompañar el trabajo real de los comercios y emprendimientos.
+            Buscamos que cada propuesta tenga una buena presencia visual, una navegación cómoda y una sensación de calidad desde el primer contacto.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <article class="about-card glass reveal">
+            <h3>¿A qué se dedica GestOK?</h3>
+            <p>
+              GestOK trabaja en el desarrollo de sistemas y propuestas digitales para comercios.
+              Hoy la marca se presenta en tres caminos principales: software de ventas, tiendas online y una solución orientada al control de ventas.
+            </p>
+            <div class="about-points">
+              <div><i>✓</i><span>Diseño moderno y simple.</span></div>
+              <div><i>✓</i><span>Experiencia optimizada para distintos dispositivos.</span></div>
+              <div><i>✓</i><span>Secciones animadas con una estética profesional.</span></div>
+              <div><i>✓</i><span>Estructura clara para mostrar cada solución.</span></div>
+            </div>
+          </article>
+
+          <article class="about-card glass reveal">
+            <h3>Una presentación más limpia.</h3>
+            <p>
+              Esta nueva web está pensada como una base moderna y optimizada: una portada clara, una breve explicación de la marca
+              y un sector final donde el usuario elige exactamente qué está buscando para abrir una experiencia específica.
+            </p>
+            <div class="about-points">
+              <div><i>01</i><span>Entrada de bienvenida.</span></div>
+              <div><i>02</i><span>Página principal explicativa.</span></div>
+              <div><i>03</i><span>Selector de soluciones.</span></div>
+              <div><i>04</i><span>Detalle individual con botón “Ver demo”.</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section choices" id="buscas">
+      <div class="container">
+        <div class="reveal">
+          <div class="eyebrow">Qué es lo que buscás</div>
+          <h2 class="section-title">Elegí la opción que <span>mejor encaja</span> con tu necesidad.</h2>
+          <p class="lead">
+            Cada cuadro abre una experiencia distinta con animación de entrada, explicación breve y el botón
+            <b style="color:#fff;">Ver demo</b> preparado para que después podamos agregar el enlace correspondiente.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="choice-card glass reveal" data-detail="ventas" tabindex="0">
+            <div class="choice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4.5 6.5a2 2 0 0 1 2-2h11.4a2 2 0 0 1 1.8 1.1l1.1 2.1a2 2 0 0 1 .2.9V17a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2V6.5Z" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M7.5 10.5h8.8M7.5 13.5h5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Software de ventas</h3>
+            <p>
+              Una solución para vender, administrar y organizar el movimiento del negocio con una interfaz moderna y práctica.
+            </p>
+            <div class="choice-meta">
+              <span>Ventas</span><span>Gestión</span><span>Estadísticas</span>
+            </div>
+            <div class="choice-footer">
+              <b>Ver experiencia</b><span>→</span>
+            </div>
+          </article>
+
+          <article class="choice-card glass reveal" data-detail="tiendas" tabindex="0">
+            <div class="choice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5.2 9h13.6l-1 10.2H6.2L5.2 9Z" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Tiendas online</h3>
+            <p>
+              Tiendas creadas desde cero para comercios que quieren vender por internet con una presencia propia y profesional.
+            </p>
+            <div class="choice-meta">
+              <span>E-commerce</span><span>Diseño</span><span>Comercio</span>
+            </div>
+            <div class="choice-footer">
+              <b>Ver experiencia</b><span>→</span>
+            </div>
+          </article>
+
+          <article class="choice-card glass reveal" data-detail="control" tabindex="0">
+            <div class="choice-badge">Nuevo</div>
+            <div class="choice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="4.5" y="4.5" width="15" height="15" rx="2.4" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M8 14l2.2-2.2 2 1.7 3.8-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Controlador de ventas</h3>
+            <p>
+              Una propuesta enfocada en el control comercial, el seguimiento del negocio y la lectura rápida de información importante.
+            </p>
+            <div class="choice-meta">
+              <span>Control</span><span>Seguimiento</span><span>Negocio</span>
+            </div>
+            <div class="choice-footer">
+              <b>Ver experiencia</b><span>→</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <div class="container">
+        <div class="footer-box glass">
+          <b>GestOK</b> · Base nueva, moderna y optimizada para seguir agregando demos, enlaces y más información más adelante.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="detail-layer" id="detailLayer">
+    <div class="cinematic" id="cinematic">
+      <div class="cine-wrap">
+        <div class="orbit-ring r1"></div>
+        <div class="orbit-ring r2"></div>
+
+        <div class="orbit a" id="orbitA">
+          <div class="orbit-item i1"><div><i id="icon1">🛒</i><small id="label1">Ventas</small></div></div>
+          <div class="orbit-item i2"><div><i id="icon2">📦</i><small id="label2">Stock</small></div></div>
+          <div class="orbit-item i3"><div><i id="icon3">📊</i><small id="label3">Estadísticas</small></div></div>
+          <div class="orbit-item i4"><div><i id="icon4">💲</i><small id="label4">Caja</small></div></div>
+        </div>
+
+        <div class="orbit b slow" id="orbitB">
+          <div class="orbit-item i1"><div><i id="icon5">🧾</i><small id="label5">Gestión</small></div></div>
+          <div class="orbit-item i2"><div><i id="icon6">🏪</i><small id="label6">Negocio</small></div></div>
+        </div>
+
+        <div class="cine-core">
+          <div>
+            <strong id="cineTitle">Software de ventas</strong>
+            <span id="cineSubtitle">Preparando la experiencia…</span>
+          </div>
+        </div>
+      </div>
+      <button class="cine-skip" id="cineSkip" type="button">Omitir animación</button>
+    </div>
+
+    <section class="detail-view" id="detail-ventas">
+      <div class="container">
+        <div class="detail-head">
+          <button class="btn-back" data-back type="button">← Volver</button>
+          <div class="detail-pill">Software de ventas</div>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card glass">
+            <div class="eyebrow">GestOK ventas</div>
+            <h2>Vendé y organizá tu negocio con una experiencia <span>simple y moderna.</span></h2>
+            <p>
+              Esta opción representa el área de software de ventas de GestOK. Está pensada para mostrar una propuesta visual profesional,
+              transmitir orden y explicar de forma breve para qué sirve la solución.
+            </p>
+            <div class="detail-tags">
+              <span>Ventas</span><span>Gestión</span><span>Control</span><span>Estadísticas</span>
+            </div>
+            <div class="cta-row">
+              <a class="btn-demo" href="#" data-demo-link="ventas">Ver demo</a>
+              <button class="btn-secondary" data-back type="button">Volver a opciones</button>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="num">01</div>
+                <h4>Operación ágil</h4>
+                <p>Una presentación enfocada en vender rápido y transmitir practicidad.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">02</div>
+                <h4>Gestión clara</h4>
+                <p>Muestra orden, control y una lectura simple del movimiento del negocio.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">03</div>
+                <h4>Buena presencia</h4>
+                <p>La animación de entrada refuerza la sensación de calidad profesional.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">04</div>
+                <h4>Demo futura</h4>
+                <p>El botón “Ver demo” queda listo para enlazar cuando quieras.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="preview-card glass">
+            <h3>Vista de presentación</h3>
+            <p>
+              En esta base la sección de detalle es limpia: un texto claro, una lista breve de puntos
+              y un bloque visual consistente con la identidad general de GestOK.
+            </p>
+            <div class="mini-mock">
+              <div class="top"><span>Panel de ventas</span><span>GestOK</span></div>
+              <div class="body">
+                <div class="box"><strong>Ventas</strong><span>Operación diaria y registro.</span></div>
+                <div class="box"><strong>Productos</strong><span>Catálogo y organización.</span></div>
+                <div class="box"><strong>Caja</strong><span>Control simple y visual.</span></div>
+                <div class="box"><strong>Datos</strong><span>Información útil del negocio.</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-view" id="detail-tiendas">
+      <div class="container">
+        <div class="detail-head">
+          <button class="btn-back" data-back type="button">← Volver</button>
+          <div class="detail-pill">Tiendas online</div>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card glass">
+            <div class="eyebrow">GestOK tiendas online</div>
+            <h2>Llevá tu comercio a internet con una tienda <span>propia y profesional.</span></h2>
+            <p>
+              Esta experiencia representa las tiendas online para comercios. La idea es presentar el servicio de forma moderna,
+              simple y directa, con una identidad visual coherente y espacio para sumar el demo más adelante.
+            </p>
+            <div class="detail-tags">
+              <span>Tienda online</span><span>Diseño</span><span>E-commerce</span><span>Comercio</span>
+            </div>
+            <div class="cta-row">
+              <a class="btn-demo" href="#" data-demo-link="tiendas">Ver demo</a>
+              <button class="btn-secondary" data-back type="button">Volver a opciones</button>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="num">01</div>
+                <h4>Presencia digital</h4>
+                <p>Ideal para mostrar productos y comenzar a vender por internet.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">02</div>
+                <h4>Diseño a medida</h4>
+                <p>La tienda puede adaptarse al estilo y al rubro de cada comercio.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">03</div>
+                <h4>Experiencia moderna</h4>
+                <p>La interfaz mantiene una estética cuidada y profesional.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">04</div>
+                <h4>Demo preparada</h4>
+                <p>Más adelante solo hay que reemplazar el enlace por el demo real.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="preview-card glass">
+            <h3>Vista de tienda</h3>
+            <p>
+              Este bloque acompaña visualmente la explicación y ayuda a comunicar una estructura ordenada,
+              ideal para un servicio de tiendas hechas desde cero.
+            </p>
+            <div class="mini-mock">
+              <div class="top"><span>Mi tienda</span><span>Buscar · Categorías</span></div>
+              <div class="body">
+                <div class="box"><strong>Producto 1</strong><span>Presentación destacada.</span></div>
+                <div class="box"><strong>Producto 2</strong><span>Espacio para catálogo.</span></div>
+                <div class="box"><strong>Diseño</strong><span>Identidad visual del comercio.</span></div>
+                <div class="box"><strong>Carrito</strong><span>Experiencia enfocada en venta.</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-view" id="detail-control">
+      <div class="container">
+        <div class="detail-head">
+          <button class="btn-back" data-back type="button">← Volver</button>
+          <div class="detail-pill">Controlador de ventas</div>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card glass">
+            <div class="eyebrow">GestOK controlador</div>
+            <h2>Seguí el rendimiento comercial con una solución de <span>control y seguimiento.</span></h2>
+            <p>
+              Esta tercera opción está orientada a una propuesta más específica: visualizar el control del negocio,
+              seguir datos importantes y mostrar una lectura rápida de cómo se comporta la actividad comercial.
+            </p>
+            <div class="detail-tags">
+              <span>Control</span><span>Seguimiento</span><span>Negocio</span><span>Información</span>
+            </div>
+            <div class="cta-row">
+              <a class="btn-demo" href="#" data-demo-link="control">Ver demo</a>
+              <button class="btn-secondary" data-back type="button">Volver a opciones</button>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="num">01</div>
+                <h4>Lectura rápida</h4>
+                <p>Permite comunicar una visión clara del rendimiento comercial.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">02</div>
+                <h4>Control visual</h4>
+                <p>La propuesta se enfoca en datos, estado y seguimiento.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">03</div>
+                <h4>Experiencia dedicada</h4>
+                <p>Cuenta con su propia animación para diferenciar el sector.</p>
+              </article>
+              <article class="feature-card">
+                <div class="num">04</div>
+                <h4>Demo enlazable</h4>
+                <p>Se deja preparado el acceso para sumar el vínculo cuando lo tengas.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="preview-card glass">
+            <h3>Bloque de control</h3>
+            <p>
+              Mantiene el mismo lenguaje visual que el resto del sitio, pero con un enfoque más analítico
+              y orientado a la observación del negocio.
+            </p>
+            <div class="mini-mock">
+              <div class="top"><span>Control comercial</span><span>GestOK</span></div>
+              <div class="body">
+                <div class="box"><strong>Resumen</strong><span>Lectura general.</span></div>
+                <div class="box"><strong>Alertas</strong><span>Seguimiento importante.</span></div>
+                <div class="box"><strong>Rendimiento</strong><span>Indicadores del negocio.</span></div>
+                <div class="box"><strong>Estado</strong><span>Información ordenada.</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const intro = document.getElementById('intro');
+    const skipIntro = document.getElementById('skipIntro');
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('nav');
+    const detailLayer = document.getElementById('detailLayer');
+    const cinematic = document.getElementById('cinematic');
+    const scrollIndicator = document.getElementById('scrollIndicator');
+
+    function closeIntro(){
+      if(!intro) return;
+      intro.classList.add('hide');
+      setTimeout(() => {
+        if(intro && intro.parentNode) intro.parentNode.removeChild(intro);
+      }, 650);
+    }
+    skipIntro?.addEventListener('click', closeIntro);
+    window.addEventListener('load', () => setTimeout(closeIntro, 2350), { once:true });
+
+    menuBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => nav.classList.remove('open'));
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if(nav.classList.contains('open') && !nav.contains(e.target)){
+        nav.classList.remove('open');
+      }
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    function updateProgress(){
+      const active = document.querySelector('.detail-view.active');
+      if(active){
+        const max = active.scrollHeight - active.clientHeight;
+        const pct = max > 0 ? (active.scrollTop / max) * 100 : 0;
+        scrollIndicator.style.width = pct + '%';
+      }else{
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const pct = max > 0 ? (scrollY / max) * 100 : 0;
+        scrollIndicator.style.width = pct + '%';
+      }
+    }
+    addEventListener('scroll', updateProgress, { passive:true });
+    document.querySelectorAll('.detail-view').forEach(v => v.addEventListener('scroll', updateProgress, { passive:true }));
+    updateProgress();
+
+    const cinematicData = {
+      ventas: {
+        title:'Software de ventas',
+        subtitle:'Preparando la experiencia del sector ventas…',
+        icons:[['🛒','Ventas'],['📦','Productos'],['📊','Datos'],['💲','Caja'],['🧾','Gestión'],['🏪','Negocio']]
+      },
+      tiendas: {
+        title:'Tiendas online',
+        subtitle:'Preparando la experiencia de e-commerce…',
+        icons:[['🛍️','Tienda'],['🎨','Diseño'],['📦','Catálogo'],['☁️','Nube'],['🏷️','Productos'],['🌐','Online']]
+      },
+      control: {
+        title:'Controlador de ventas',
+        subtitle:'Preparando la experiencia de control comercial…',
+        icons:[['📈','Control'],['🧠','Análisis'],['📋','Seguimiento'],['⚙️','Gestión'],['🔔','Alertas'],['🏢','Comercio']]
+      }
+    };
+
+    let targetDetail = null;
+    let cinematicTimer = null;
+
+    function fillCinematic(type){
+      const data = cinematicData[type];
+      document.getElementById('cineTitle').textContent = data.title;
+      document.getElementById('cineSubtitle').textContent = data.subtitle;
+      data.icons.forEach((item, idx) => {
+        document.getElementById('icon' + (idx + 1)).textContent = item[0];
+        document.getElementById('label' + (idx + 1)).textContent = item[1];
+      });
+    }
+
+    function openDetail(type){
+      targetDetail = document.getElementById('detail-' + type);
+      if(!targetDetail) return;
+      fillCinematic(type);
+      detailLayer.classList.add('show');
+      cinematic.classList.add('show');
+      document.querySelectorAll('.detail-view').forEach(v => {
+        v.classList.remove('active');
+        v.scrollTop = 0;
+      });
+      clearTimeout(cinematicTimer);
+      cinematicTimer = setTimeout(showDetail, 2400);
+      updateProgress();
+    }
+
+    function showDetail(){
+      cinematic.classList.remove('show');
+      if(targetDetail){
+        targetDetail.classList.add('active');
+        updateProgress();
+      }
+    }
+
+    function closeDetail(){
+      clearTimeout(cinematicTimer);
+      detailLayer.classList.remove('show');
+      cinematic.classList.remove('show');
+      document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+      targetDetail = null;
+      document.getElementById('buscas').scrollIntoView({ behavior:'smooth', block:'start' });
+      updateProgress();
+    }
+
+    document.getElementById('cineSkip')?.addEventListener('click', showDetail);
+    document.querySelectorAll('[data-back]').forEach(btn => btn.addEventListener('click', closeDetail));
+
+    document.querySelectorAll('[data-detail]').forEach(card => {
+      card.addEventListener('click', () => openDetail(card.dataset.detail));
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          openDetail(card.dataset.detail);
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-demo-link]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Acá vamos a agregar el link de la demo de: ' + link.dataset.demoLink);
+      });
+    });
+
+    addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && detailLayer.classList.contains('show')){
+        closeDetail();
+      }
+    });
+  </script>
+</body>
+</html>
